@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PRACHI CALC</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+
+            background:
+                radial-gradient(circle at top left, #7c3aed, transparent 35%),
+                radial-gradient(circle at bottom right, #06b6d4, transparent 35%),
+                #050816;
+
+            transition: 0.4s;
+        }
+
+        /* LIGHT MODE */
+
+        body.light {
+            background:
+                radial-gradient(circle at top left, #f9a8d4, transparent 35%),
+                radial-gradient(circle at bottom right, #67e8f9, transparent 35%),
+                #f8fafc;
+        }
+
+        /* MAIN CONTAINER */
+
+        .container {
+            display: flex;
+            gap: 20px;
+
+            width: 850px;
+            max-width: 100%;
+        }
+
+        /* CALCULATOR */
+
+        .calculator {
+            width: 400px;
+
+            padding: 25px;
+
+            border-radius: 30px;
+
+            background: rgba(15, 23, 42, 0.94);
+
+            border: 1px solid rgba(255, 255, 255, 0.12);
+
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.6),
+                0 0 40px rgba(168, 85, 247, 0.25);
+
+            backdrop-filter: blur(20px);
+        }
+
+        body.light .calculator {
+            background: rgba(255, 255, 255, 0.85);
+
+            border: 1px solid rgba(0, 0, 0, 0.08);
+
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        /* HEADER */
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 18px;
+        }
+
+        .logo {
+            color: #d8b4fe;
+
+            font-size: 20px;
+            font-weight: bold;
+
+            letter-spacing: 3px;
+        }
+
+        body.light .logo {
+            color: #7c3aed;
+        }
+
+        .theme-btn {
+            width: 45px;
+            height: 45px;
+
+            border-radius: 50%;
+
+            border: none;
+
+            background: #1e293b;
+
+            color: white;
+
+            font-size: 20px;
+
+            cursor: pointer;
+
+            box-shadow: none;
+        }
+
+        .theme-btn:hover {
+            transform: rotate(20deg);
+        }
+
+        /* DISPLAY */
+
+        .display {
+            height: 125px;
+
+            padding: 18px 20px;
+
+            margin-bottom: 18px;
+
+            border-radius: 22px;
+
+            background: #020617;
+
+            display: flex;
+            flex-direction: column;
+
+            justify-content: flex-end;
+            align-items: flex-end;
+
+            overflow: hidden;
+
+            border: 1px solid rgba(255,255,255,0.08);
+
+            box-shadow:
+                inset 0 0 25px rgba(0,0,0,0.8);
+        }
+
+        body.light .display {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+        }
+
+        #previous {
+            min-height: 22px;
+
+            color: #64748b;
+
+            font-size: 15px;
+        }
+
+        #current {
+            color: white;
+
+            font-size: 38px;
+
+            font-weight: bold;
+
+            max-width: 100%;
+
+            overflow: hidden;
+        }
+
+        body.light #current {
+            color: #0f172a;
+        }
+
+        /* SCIENTIFIC BUTTONS */
+
+        .scientific {
+            display: grid;
+
+            grid-template-columns: repeat(5, 1fr);
+
+            gap: 8px;
+
+            margin-bottom: 12px;
+        }
+
+        .scientific button {
+            height: 45px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: #312e81;
+
+            color: #c4b5fd;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .scientific button:hover {
+            background: #4c1d95;
+
+            transform: translateY(-2px);
+        }
+
+        /* NORMAL BUTTONS */
+
+        .buttons {
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 11px;
+        }
+
+        button {
+            height: 62px;
+
+            border: none;
+
+            border-radius: 18px;
+
+            background: #1e293b;
+
+            color: white;
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            box-shadow: 0 6px 0 #0f172a;
+
+            transition: 0.15s;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+
+            background: #334155;
+        }
+
+        button:active {
+            transform: translateY(4px);
+
+            box-shadow: 0 2px 0 #0f172a;
+        }
+
+        .special {
+            background: linear-gradient(135deg, #334155, #475569);
+
+            color: #67e8f9;
+        }
+
+        .operator {
+            background: linear-gradient(135deg, #7c3aed, #db2777);
+
+            box-shadow: 0 6px 0 #581c87;
+        }
+
+        .operator:hover {
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+        }
+
+        .equals {
+            background: linear-gradient(135deg, #06b6d4, #2563eb);
+
+            box-shadow: 0 6px 0 #164e63;
+        }
+
+        .equals:hover {
+            background: linear-gradient(135deg, #22d3ee, #3b82f6);
+        }
+
+        .zero {
+            grid-column: span 2;
+        }
+
+        /* HISTORY */
+
+        .history {
+            width: 400px;
+
+            padding: 25px;
+
+            border-radius: 30px;
+
+            background: rgba(15, 23, 42, 0.94);
+
+            color: white;
+
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+        }
+
+        body.light .history {
+            background: rgba(255,255,255,0.9);
+
+            color: #0f172a;
+        }
+
+        .history-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 20px;
+        }
+
+        .history h2 {
+            color: #c084fc;
+
+            font-size: 20px;
+        }
+
+        body.light .history h2 {
+            color: #7c3aed;
+        }
+
+        .clear-history {
+            height: 35px;
+
+            padding: 0 12px;
+
+            border-radius: 10px;
+
+            font-size: 12px;
+
+            box-shadow: none;
+
+            background: #334155;
+        }
+
+        .history-list {
+            max-height: 430px;
+
+            overflow-y: auto;
+        }
+
+        .history-item {
+            padding: 12px;
+
+            margin-bottom: 10px;
+
+            border-radius: 12px;
+
+            background: #1e293b;
+
+            color: #cbd5e1;
+
+            font-size: 14px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        body.light .history-item {
+            background: #f1f5f9;
+
+            color: #334155;
+        }
+
+        .history-item:hover {
+            transform: translateX(4px);
+        }
+
+        .empty {
+            color: #64748b;
+
+            text-align: center;
+
+            margin-top: 50px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 800px) {
+
+            .container {
+                flex-direction: column;
+
+                align-items: center;
+            }
+
+            .calculator,
+            .history {
+                width: 100%;
+
+                max-width: 400px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="container">
+
+
+        <!-- CALCULATOR -->
+
+        <div class="calculator">
+
+            <div class="header">
+
+                <div class="logo">
+                    PRACHI CALC
+                </div>
+
+                <button
+                    class="theme-btn"
+                    onclick="toggleTheme()"
+                    id="themeButton">
+                    🌙
+                </button>
+
+            </div>
+
+
+            <!-- DISPLAY -->
+
+            <div class="display">
+
+                <div id="previous"></div>
+
+                <div id="current">
+                    0
+                </div>
+
+            </div>
+
+
+            <!-- SCIENTIFIC -->
+
+            <div class="scientific">
+
+                <button onclick="scientific('sqrt')">
+                    √
+                </button>
+
+                <button onclick="scientific('square')">
+                    x²
+                </button>
+
+                <button onclick="scientific('sin')">
+                    sin
+                </button>
+
+                <button onclick="scientific('cos')">
+                    cos
+                </button>
+
+                <button onclick="scientific('tan')">
+                    tan
+                </button>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="buttons">
+
+                <button
+                    class="special"
+                    onclick="clearCalculator()">
+                    AC
+                </button>
+
+                <button
+                    class="special"
+                    onclick="deleteNumber()">
+                    DEL
+                </button>
+
+                <button
+                    class="special"
+                    onclick="percentage()">
+                    %
+                </button>
+
+                <button
+                    class="operator"
+                    onclick="operatorPressed('/')">
+                    ÷
+                </button>
+
+
+                <button onclick="numberPressed('7')">
+                    7
+                </button>
+
+                <button onclick="numberPressed('8')">
+                    8
+                </button>
+
+                <button onclick="numberPressed('9')">
+                    9
+                </button>
+
+                <button
+                    class="operator"
+                    onclick="operatorPressed('*')">
+                    ×
+                </button>
+
+
+                <button onclick="numberPressed('4')">
+                    4
+                </button>
+
+                <button onclick="numberPressed('5')">
+                    5
+                </button>
+
+                <button onclick="numberPressed('6')">
+                    6
+                </button>
+
+                <button
+                    class="operator"
+                    onclick="operatorPressed('-')">
+                    −
+                </button>
+
+
+                <button onclick="numberPressed('1')">
+                    1
+                </button>
+
+                <button onclick="numberPressed('2')">
+                    2
+                </button>
+
+                <button onclick="numberPressed('3')">
+                    3
+                </button>
+
+                <button
+                    class="operator"
+                    onclick="operatorPressed('+')">
+                    +
+                </button>
+
+
+                <button
+                    class="zero"
+                    onclick="numberPressed('0')">
+                    0
+                </button>
+
+                <button onclick="numberPressed('.')">
+                    .
+                </button>
+
+                <button
+                    class="equals"
+                    onclick="calculate()">
+                    =
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- HISTORY -->
+
+        <div class="history">
+
+            <div class="history-header">
+
+                <h2>
+                    📜 History
+                </h2>
+
+                <button
+                    class="clear-history"
+                    onclick="clearHistory()">
+                    Clear
+                </button>
+
+            </div>
+
+
+            <div
+                id="historyList"
+                class="history-list">
+
+                <div class="empty">
+                    No calculations yet
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        let currentNumber = "";
+        let previousNumber = "";
+        let selectedOperator = "";
+
+        const currentDisplay =
+            document.getElementById("current");
+
+        const previousDisplay =
+            document.getElementById("previous");
+
+
+        /* NUMBER */
+
+        function numberPressed(number) {
+
+            if (currentNumber === "Error") {
+                currentNumber = "";
+            }
+
+            if (
+                number === "." &&
+                currentNumber.includes(".")
+            ) {
+                return;
+            }
+
+            currentNumber += number;
+
+            updateDisplay();
+        }
+
+
+        /* OPERATOR */
+
+        function operatorPressed(operator) {
+
+            if (currentNumber === "") {
+                return;
+            }
+
+            if (
+                previousNumber !== "" &&
+                selectedOperator !== ""
+            ) {
+                calculate();
+            }
+
+            previousNumber = currentNumber;
+
+            selectedOperator = operator;
+
+            currentNumber = "";
+
+            updateDisplay();
+        }
+
+
+        /* CALCULATE */
+
+        function calculate() {
+
+            if (
+                previousNumber === "" ||
+                currentNumber === "" ||
+                selectedOperator === ""
+            ) {
+                return;
+            }
+
+            const first =
+                parseFloat(previousNumber);
+
+            const second =
+                parseFloat(currentNumber);
+
+            let result;
+
+
+            if (selectedOperator === "+") {
+                result = first + second;
+            }
+
+            else if (selectedOperator === "-") {
+                result = first - second;
+            }
+
+            else if (selectedOperator === "*") {
+                result = first * second;
+            }
+
+            else if (selectedOperator === "/") {
+
+                if (second === 0) {
+
+                    currentNumber = "Error";
+
+                    previousNumber = "";
+
+                    selectedOperator = "";
+
+                    updateDisplay();
+
+                    return;
+                }
+
+                result = first / second;
+            }
+
+
+            const expression =
+                first +
+                " " +
+                selectedOperator +
+                " " +
+                second +
+                " = " +
+                result;
+
+
+            addHistory(expression);
+
+
+            currentNumber =
+                Number(result.toFixed(10)).toString();
+
+            previousNumber = "";
+
+            selectedOperator = "";
+
+            updateDisplay();
+        }
+
+
+        /* CLEAR */
+
+        function clearCalculator() {
+
+            currentNumber = "";
+
+            previousNumber = "";
+
+            selectedOperator = "";
+
+            updateDisplay();
+        }
+
+
+        /* DELETE */
+
+        function deleteNumber() {
+
+            if (currentNumber === "Error") {
+
+                currentNumber = "";
+
+            } else {
+
+                currentNumber =
+                    currentNumber.slice(0, -1);
+
+            }
+
+            updateDisplay();
+        }
+
+
+        /* PERCENTAGE */
+
+        function percentage() {
+
+            if (currentNumber === "") {
+                return;
+            }
+
+            currentNumber =
+                (parseFloat(currentNumber) / 100).toString();
+
+            updateDisplay();
+        }
+
+
+        /* SCIENTIFIC */
+
+        function scientific(type) {
+
+            if (currentNumber === "") {
+                return;
+            }
+
+            const number =
+                parseFloat(currentNumber);
+
+            let result;
+
+
+            if (type === "sqrt") {
+
+                result = Math.sqrt(number);
+
+            }
+
+            else if (type === "square") {
+
+                result = number * number;
+
+            }
+
+            else if (type === "sin") {
+
+                result =
+                    Math.sin(number * Math.PI / 180);
+
+            }
+
+            else if (type === "cos") {
+
+                result =
+                    Math.cos(number * Math.PI / 180);
+
+            }
+
+            else if (type === "tan") {
+
+                result =
+                    Math.tan(number * Math.PI / 180);
+
+            }
+
+
+            addHistory(
+                type +
+                "(" +
+                number +
+                ") = " +
+                result
+            );
+
+
+            currentNumber =
+                Number(result.toFixed(10)).toString();
+
+            updateDisplay();
+        }
+
+
+        /* DISPLAY */
+
+        function updateDisplay() {
+
+            currentDisplay.innerText =
+                currentNumber || "0";
+
+            previousDisplay.innerText =
+                previousNumber +
+                " " +
+                selectedOperator;
+        }
+
+
+        /* HISTORY */
+
+        function addHistory(expression) {
+
+            let history =
+                JSON.parse(
+                    localStorage.getItem("prachiHistory")
+                ) || [];
+
+
+            history.unshift(expression);
+
+
+            if (history.length > 20) {
+                history.pop();
+            }
+
+
+            localStorage.setItem(
+                "prachiHistory",
+                JSON.stringify(history)
+            );
+
+
+            displayHistory();
+        }
+
+
+        function displayHistory() {
+
+            const historyList =
+                document.getElementById("historyList");
+
+
+            let history =
+                JSON.parse(
+                    localStorage.getItem("prachiHistory")
+                ) || [];
+
+
+            if (history.length === 0) {
+
+                historyList.innerHTML =
+                    '<div class="empty">No calculations yet</div>';
+
+                return;
+            }
+
+
+            historyList.innerHTML = "";
+
+
+            history.forEach(function(item) {
+
+                const div =
+                    document.createElement("div");
+
+                div.className = "history-item";
+
+                div.innerText = item;
+
+
+                div.onclick = function() {
+
+                    const result =
+                        item.split(" = ").pop();
+
+                    currentNumber = result;
+
+                    updateDisplay();
+                };
+
+
+                historyList.appendChild(div);
+
+            });
+
+        }
+
+
+        function clearHistory() {
+
+            localStorage.removeItem(
+                "prachiHistory"
+            );
+
+            displayHistory();
+        }
+
+
+        /* DARK / LIGHT MODE */
+
+        function toggleTheme() {
+
+            document.body.classList.toggle("light");
+
+
+            const button =
+                document.getElementById("themeButton");
+
+
+            if (
+                document.body.classList.contains("light")
+            ) {
+
+                button.innerText = "☀️";
+
+                localStorage.setItem(
+                    "prachiTheme",
+                    "light"
+                );
+
+            } else {
+
+                button.innerText = "🌙";
+
+                localStorage.setItem(
+                    "prachiTheme",
+                    "dark"
+                );
+            }
+
+        }
+
+
+        /* LOAD THEME */
+
+        if (
+            localStorage.getItem("prachiTheme") === "light"
+        ) {
+
+            document.body.classList.add("light");
+
+            document.getElementById(
+                "themeButton"
+            ).innerText = "☀️";
+
+        }
+
+
+        /* LOAD HISTORY */
+
+        displayHistory();
+
+
+        /* KEYBOARD */
+
+        document.addEventListener(
+            "keydown",
+            function(event) {
+
+                const key = event.key;
+
+
+                if (
+                    key >= "0" &&
+                    key <= "9"
+                ) {
+
+                    numberPressed(key);
+
+                }
+
+
+                else if (key === ".") {
+
+                    numberPressed(".");
+
+                }
+
+
+                else if (
+                    key === "+" ||
+                    key === "-" ||
+                    key === "*" ||
+                    key === "/"
+                ) {
+
+                    operatorPressed(key);
+
+                }
+
+
+                else if (
+                    key === "Enter" ||
+                    key === "="
+                ) {
+
+                    event.preventDefault();
+
+                    calculate();
+
+                }
+
+
+                else if (key === "Backspace") {
+
+                    deleteNumber();
+
+                }
+
+
+                else if (key === "Escape") {
+
+                    clearCalculator();
+
+                }
+
+
+                else if (key === "%") {
+
+                    percentage();
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
